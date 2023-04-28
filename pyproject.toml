@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "goit-web-hw5"
+version = "0.1.0"
+description = "Async web service"
+authors = ["C-Hurtmann <constantine2903@gmail.com>"]
+readme = "README.md"
+packages = [{include = "goit_web_hw5"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+aiohttp = "^3.8.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
