@@ -35,7 +35,10 @@ class Server:
 
     async def distrubute(self, ws: WebSocketServerProtocol):
         async for message in ws:
-             await self.send_to_clients(f"{ws.name}: {message}")
+            if message == '/exchange':
+                await self.send_to_clients(f"hello world!") # TODO connection to exchange module
+            else:
+                await self.send_to_clients(f"{ws.name}: {message}")
 
 
 async def main():
@@ -45,3 +48,4 @@ async def main():
 
 if __name__ == '__main__':
     asyncio.run(main())
+# connetion to chat:  file://wsl.localhost/Ubuntu/home/czagorodnyi/git/homeworks/GOIT_WEB_hw5/chat/index.html
