@@ -40,8 +40,7 @@ class Server:
                 command = message.replace('/exchange', 'python3 chat/scripts/exchange.py')
                 process = subprocess.run(command,
                                          capture_output=True, text=True, shell=True)
-                print(process.stdout)
-                await self.send_to_clients(process.stdout) # TODO connection to exchange module
+                await self.send_to_clients(process.stdout)
             else:
                 await self.send_to_clients(f"{ws.name}: {message}")
 
