@@ -1,7 +1,10 @@
 import argparse
 import aiohttp
+from aiopath import AsyncPath
+from aiofile import AIOFile
 import asyncio
 from datetime import datetime, timedelta
+from functools import wraps
 from time import time
 from pprint import pprint
 
@@ -60,10 +63,24 @@ class RequestHandler:
             result = await asyncio.gather(*requests)
             return result
 
+def logger(func):
+    @wraps(func)
+    async def wrapper(*args, **kwargs):
+        start = time()
+        date_stamp = str(datetime.now())
+        result = await func(*args, **kwargs)
+        finish = time() - start
+        loggs = f"{date_stamp} | exchange called with {kwargs['days']} days. Execution time is {finish}\n"
+        async with AIOFile('logs/exchange.log', 'a') as aiof:
+            await aiof.write(loggs)
+        return result
+    
+    return wrapper
 
-def main(days=1, add_currency=None):
+@logger
+async def main(days=1, add_currency=None):
     selected_currencies = ["USD", "EUR"] + [add_currency]
-    jsons = asyncio.run(RequestHandler().get_exchange_rate(days))
+    jsons = await RequestHandler().get_exchange_rate(days)
     formated_jsons = []
     for json in jsons:
         date = json["date"]
@@ -95,4 +112,4 @@ if __name__ == "__main__":
         help="Extend report by chosen currency"
     )
     namespace = parser.parse_args()
-    pprint(main(days=namespace.d, add_currency=namespace.a))
+    pprint(asyncio.run(main(days=namespace.d, add_currency=namespace.a)))
