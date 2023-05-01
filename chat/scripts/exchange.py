@@ -1,6 +1,5 @@
 import argparse
 import aiohttp
-from aiopath import AsyncPath
 from aiofile import AIOFile
 import asyncio
 from datetime import datetime, timedelta
