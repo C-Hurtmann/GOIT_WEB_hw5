@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import subprocess
 import websockets
 import names
 from websockets import WebSocketServerProtocol
@@ -35,8 +36,12 @@ class Server:
 
     async def distrubute(self, ws: WebSocketServerProtocol):
         async for message in ws:
-            if message == '/exchange':
-                await self.send_to_clients(f"hello world!") # TODO connection to exchange module
+            if '/exchange' in message:
+                command = message.replace('/exchange', 'python3 chat/scripts/exchange.py')
+                process = subprocess.run(command,
+                                         capture_output=True, text=True, shell=True)
+                print(process.stdout)
+                await self.send_to_clients(process.stdout) # TODO connection to exchange module
             else:
                 await self.send_to_clients(f"{ws.name}: {message}")
 

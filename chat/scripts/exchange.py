@@ -63,7 +63,6 @@ class RequestHandler:
 
 def main(days=1, add_currency=None):
     selected_currencies = ["USD", "EUR"] + [add_currency]
-    start = time()
     jsons = asyncio.run(RequestHandler().get_exchange_rate(days))
     formated_jsons = []
     for json in jsons:
@@ -85,17 +84,15 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "-d",
-        "--days",
         type=int,
         default=1,
         help="Creates additional reports for chosen number of days from today counting back",
     )
     parser.add_argument(
         "-a",
-        "--add",
         type=str,
         default=None,
         help="Extend report by chosen currency"
     )
     namespace = parser.parse_args()
-    pprint(main(days=namespace.days, add_currency=namespace.add))
+    pprint(main(days=namespace.d, add_currency=namespace.a))
